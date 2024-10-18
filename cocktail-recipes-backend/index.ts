@@ -3,7 +3,7 @@ import cors from 'cors';
 import config from './config';
 import mongoose from 'mongoose';
 import usersRouter from './routers/users';
-import cocktailsRouter from './routers/cocktail';
+import cocktailsRouter from './routers/cocktails';
 
 const app = express();
 const port = 8000;

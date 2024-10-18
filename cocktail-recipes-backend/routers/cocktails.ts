@@ -9,17 +9,48 @@ const cocktailsRouter = express.Router();
 
 cocktailsRouter.get('/', auth, async (req: RequestWithUser, res, next) => {
   try {
-    const user = req.user;
-    const { userId } = req.params;
+    const currentUser = req.user;
+    const { user } = req.params;
 
-    if (user && userId) {
-      const cocktails = await Cocktail.find(user ? { user } : { isPublished: false });
+    if (currentUser && user) {
+      const cocktails = await Cocktail.find(
+        currentUser
+          ? { user: currentUser._id }
+          : { isPublished: true }).populate('user', '_id displayName');
+
       return res.send(cocktails);
     }
 
-    const cocktails = await Cocktail.find(user?.role === 'admin' ? {} : { isPublished: false });
+    const cocktails = await Cocktail.find(
+      currentUser?.role === 'admin'
+        ? {}
+        : { isPublished: true }).populate('user', '_id displayName');
 
     return res.send(cocktails);
+  } catch (e) {
+    return next(e);
+  }
+});
+
+cocktailsRouter.get('/:id', auth, async (req: RequestWithUser, res, next) => {
+  try {
+    if (!mongoose.isValidObjectId(req.params.id)) {
+      return res.status(400).send({ error: 'Invalid cocktail ID' });
+    }
+
+    const user = req.user;
+
+    const cocktail = await Cocktail.findOne({ _id: req.params.id }).populate('user', '_id displayName');
+
+    if (user?._id === cocktail?.user || user?.role === 'admin') {
+      return res.send(cocktail);
+    }
+
+    if (!cocktail || !cocktail.isPublished) {
+      return res.status(400).send({ error: 'Cocktail not found!' });
+    }
+
+    return res.send(cocktail);
   } catch (e) {
     return next(e);
   }

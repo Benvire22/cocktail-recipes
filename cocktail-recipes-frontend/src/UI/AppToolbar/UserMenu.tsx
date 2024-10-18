@@ -26,14 +26,8 @@ const UserMenu: React.FC<Props> = ({ user }) => {
 
   return (
     <Grid>
-      <Button onClick={handleClose} color="inherit" component={NavLink} to="/artists/new">
-        add Artist
-      </Button>
-      <Button onClick={handleClose} color="inherit" component={NavLink} to="/albums/new">
-        new album
-      </Button>
-      <Button onClick={handleClose} color="inherit" component={NavLink} to="/tracks/new">
-        new track
+      <Button onClick={handleClose} color="inherit" component={NavLink} to="/cocktails/new">
+        new cocktail
       </Button>
       <Button color="inherit" sx={{ ml: 10, textTransform: 'none' }} onClick={handleClick}>
         {user.displayName ? user.displayName : user.username}
@@ -44,10 +38,9 @@ const UserMenu: React.FC<Props> = ({ user }) => {
         )}
       </Button>
       <Menu open={isOpen} onClose={handleClose} anchorEl={anchorEl} keepMounted>
-        <MenuItem onClick={handleClose} component={NavLink} to="/tracks_history">
-          Show tracks history
+        <MenuItem onClick={handleClose} component={NavLink} to="/cocktails/user-cocktails">
+          Show my cocktails
         </MenuItem>
-        <MenuItem>My account</MenuItem>
         <MenuItem onClick={handleLogout}>Logout</MenuItem>
       </Menu>
     </Grid>
