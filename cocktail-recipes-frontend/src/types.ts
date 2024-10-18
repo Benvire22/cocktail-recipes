@@ -17,6 +17,13 @@ export interface Cocktail {
   isPublished: boolean;
 }
 
+export interface CocktailMutation {
+  title: string;
+  image: File;
+  recipe: string;
+  ingredients: CocktailIngredient[];
+}
+
 export interface RegisterMutation {
   username: string;
   password: string;
