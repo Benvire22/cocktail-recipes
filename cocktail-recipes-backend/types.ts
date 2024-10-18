@@ -10,16 +10,18 @@ export interface UserFields {
   googleID?: string;
 }
 
+export interface CocktailIngredient {
+  title: string;
+  quantity: string;
+}
+
 export interface ICocktail {
   _id: mongoose.Types.ObjectId;
   user: mongoose.Types.ObjectId | string;
   title: string;
   image: string;
   recipe: string;
-  ingredients: {
-    title: string;
-    quantity: string;
-  };
+  ingredients: CocktailIngredient[];
   isPublished: boolean;
 }
 
@@ -29,6 +31,7 @@ export type CocktailModel = Model<CocktailMutation>;
 
 export interface UserMethods {
   checkPassword(password: string): Promise<boolean>;
+
   generateToken(): void;
 }
 
