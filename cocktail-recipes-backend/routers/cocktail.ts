@@ -7,17 +7,19 @@ import { imageUpload } from '../multer';
 
 const cocktailsRouter = express.Router();
 
-cocktailsRouter.get('/', async (req, res, next) => {
+cocktailsRouter.get('/', auth, async (req: RequestWithUser, res, next) => {
   try {
-    const { user } = req.query;
+    const user = req.user;
+    const { userId } = req.params;
 
-    if (!mongoose.isValidObjectId(user)) {
-      return res.status(400).send({ error: 'Invalid User ID' });
+    if (user && userId) {
+      const cocktails = await Cocktail.find(user ? { user } : { isPublished: false });
+      return res.send(cocktails);
     }
 
-    const tracks = await Cocktail.find(user ? { user } : {});
+    const cocktails = await Cocktail.find(user?.role === 'admin' ? {} : { isPublished: false });
 
-    return res.send(tracks);
+    return res.send(cocktails);
   } catch (e) {
     return next(e);
   }
@@ -28,7 +30,7 @@ cocktailsRouter.post('/', auth, permit('user', 'admin'), imageUpload.single('ima
     const user = req.user;
 
     if (!user) {
-      return res.status(401).send({ error: 'User not found!' });
+      return res.status(401).send({ error: 'Wrong token!' });
     }
 
     if (!req.body.title || !req.body.recipe || !req.file || req.body.ingredients.length < 1) {
@@ -59,7 +61,7 @@ cocktailsRouter.patch('/:id/togglePublished', auth, permit('admin'), async (req:
     const user = req.user;
 
     if (!user) {
-      return res.status(401).send({ error: 'User not found!' });
+      return res.status(401).send({ error: 'Wrong token!' });
     }
 
     if (!mongoose.isValidObjectId(req.params.id)) {
@@ -86,7 +88,7 @@ cocktailsRouter.delete('/:id', auth, permit('admin'), async (req: RequestWithUse
     const user = req.user;
 
     if (!user) {
-      return res.status(401).send({ error: 'User not found!' });
+      return res.status(401).send({ error: 'Wrong token!' });
     }
 
     if (!mongoose.isValidObjectId(req.params.id)) {
