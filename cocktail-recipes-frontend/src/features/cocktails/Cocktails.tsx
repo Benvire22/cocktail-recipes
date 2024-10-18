@@ -6,20 +6,26 @@ import CocktailItem from './components/CocktailItem';
 import { selectUser } from '../users/usersSlice';
 import { selectCocktails, selectFetchingCocktails } from './cocktailsSlice';
 import { fetchCocktails } from './cocktailsThunks';
+import { useParams } from 'react-router-dom';
 
 const Artists = () => {
   const user = useAppSelector(selectUser);
   const cocktails = useAppSelector(selectCocktails);
   const isFetching = useAppSelector(selectFetchingCocktails);
   const dispatch = useAppDispatch();
+  const { userId } = useParams();
 
   useEffect(() => {
     try {
-      void dispatch(fetchCocktails()).unwrap();
+      if (userId) {
+        void dispatch(fetchCocktails(userId)).unwrap();
+      } else {
+        void dispatch(fetchCocktails()).unwrap();
+      }
     } catch (e) {
       console.error(e);
     }
-  }, [dispatch]);
+  }, [dispatch, userId]);
 
   let content: React.ReactNode = (
     <Alert severity="info" sx={{ width: '100%' }}>
@@ -35,7 +41,7 @@ const Artists = () => {
     );
   } else if (cocktails.length > 0) {
     content = cocktails.map((cocktail) => {
-      if (cocktail.isPublished) {
+      if (cocktail.isPublished || cocktail.user._id === userId) {
         return (
           <CocktailItem
             key={cocktail._id}
@@ -66,7 +72,7 @@ const Artists = () => {
       <Grid container direction="column" spacing={2}>
         <Grid container justifyContent="space-between" alignItems="center">
           <Grid>
-            <Typography variant="h3">Cocktail recipes list</Typography>
+            <Typography variant="h3">{userId ? 'My cocktail recipes' : 'Cocktail recipes list'}</Typography>
           </Grid>
         </Grid>
       </Grid>

@@ -10,9 +10,9 @@ const cocktailsRouter = express.Router();
 cocktailsRouter.get('/', auth, async (req: RequestWithUser, res, next) => {
   try {
     const currentUser = req.user;
-    const { user } = req.params;
+    const { user } = req.query;
 
-    if (currentUser && user) {
+    if (currentUser && user !== '') {
       const cocktails = await Cocktail.find(
         currentUser
           ? { user: currentUser._id }
@@ -73,7 +73,7 @@ cocktailsRouter.post('/', auth, permit('user', 'admin'), imageUpload.single('ima
       title: req.body.title,
       recipe: req.body.recipe,
       image: req.file.filename,
-      ingredients: req.body.ingredients,
+      ingredients: JSON.parse(req.body.ingredients),
     });
 
     await cocktail.save();

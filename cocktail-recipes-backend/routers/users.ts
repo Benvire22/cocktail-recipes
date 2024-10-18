@@ -11,7 +11,7 @@ const googleClient = new OAuth2Client(config.google.clientID);
 usersRouter.post('/', imageUpload.single('avatar'), async (req, res, next) => {
   try {
     const user = new User({
-      username: req.body.username,
+      email: req.body.email,
       password: req.body.password,
       displayName: req.body.displayName,
       avatar: req.file ? config.apiUrl + req.file.filename : null,
@@ -32,7 +32,7 @@ usersRouter.post('/', imageUpload.single('avatar'), async (req, res, next) => {
 
 usersRouter.post('/sessions', async (req, res, next) => {
   try {
-    const user = await User.findOne({ username: req.body.username });
+    const user = await User.findOne({ email: req.body.email });
 
     if (!user) {
       return res.status(401).send({ error: 'Username not found!' });
@@ -82,7 +82,7 @@ usersRouter.post('/google', async (req, res, next) => {
 
     if (!user) {
       user = new User({
-        username: email,
+        email,
         password: crypto.randomUUID(),
         googleID: id,
         displayName,

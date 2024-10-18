@@ -7,17 +7,18 @@ const SALT_WORK_FACTOR = 10;
 const Schema = mongoose.Schema;
 
 const UserSchema = new Schema<UserFields, UserModel, UserMethods>({
-  username: {
+  email: {
     type: String,
     required: true,
     unique: true,
+    match: [/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,5})+$/, 'Please fill a valid email address'],
     validate: {
       validator: async function(value: string): Promise<boolean> {
-        if (!(this as HydratedDocument<UserFields>).isModified('username')) {
+        if (!(this as HydratedDocument<UserFields>).isModified('email')) {
           return true;
         }
 
-        const user = await User.findOne({ username: value });
+        const user = await User.findOne({ email: value });
         return !user;
       },
       message: 'This user is already registered!',
@@ -41,7 +42,10 @@ const UserSchema = new Schema<UserFields, UserModel, UserMethods>({
     type: String,
     required: true,
   },
-  avatar: String,
+  avatar: {
+    required: true,
+    type: String,
+  },
   googleID: String,
 });
 

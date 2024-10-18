@@ -38,11 +38,11 @@ export interface LoginMutation {
 
 export interface User {
   _id: string;
-  username: string;
+  email: string;
   displayName: string;
   token: string;
   role: string;
-  avatar: string | null;
+  avatar: string;
 }
 
 export interface ValidationError {

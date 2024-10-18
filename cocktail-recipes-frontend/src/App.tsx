@@ -29,7 +29,7 @@ const App = () => {
             }
           />
           <Route
-            path="/user-cocktails"
+            path="/user-cocktails/:userId"
             element={
               <ProtectedRoute isAllowed={user && (user.role === 'user' || user.role === 'admin')}>
                 <Cocktails />

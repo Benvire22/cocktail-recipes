@@ -3,8 +3,8 @@ import { Cocktail, CocktailMutation, GlobalError } from '../../types';
 import axiosApi from '../../axiosApi';
 import { isAxiosError } from 'axios';
 
-export const fetchCocktails = createAsyncThunk<Cocktail[]>('cocktails/fetchCocktails', async () => {
-  const { data: cocktails } = await axiosApi.get<Cocktail[]>('/cocktails');
+export const fetchCocktails = createAsyncThunk<Cocktail[], string | undefined>('cocktails/fetchCocktails', async (userId = '') => {
+  const { data: cocktails } = await axiosApi.get<Cocktail[]>(`/cocktails?user=${userId}`);
 
   if (!cocktails) {
     return [];
@@ -32,7 +32,7 @@ export const createCocktail = createAsyncThunk<void, CocktailMutation, {
     formData.append('title', cocktailMutation.title);
     formData.append('image', cocktailMutation.image);
     formData.append('recipe', cocktailMutation.recipe);
-    formData.append('ingredients', cocktailMutation.ingredients.toString());
+    formData.append('ingredients', JSON.stringify(cocktailMutation.ingredients));
 
     await axiosApi.post(`/cocktails/`, formData);
   } catch (e) {

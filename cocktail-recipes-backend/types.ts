@@ -1,7 +1,7 @@
 import mongoose, { Model } from 'mongoose';
 
 export interface UserFields {
-  username: string;
+  email: string;
   password: string;
   displayName: string;
   token: string;
