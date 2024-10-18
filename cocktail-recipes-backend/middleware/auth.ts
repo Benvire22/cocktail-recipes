@@ -23,6 +23,10 @@ const auth = async (req: RequestWithUser, res: Response, next: NextFunction) => 
 
   req.user = await User.findOne({ token });
 
+  if (!req.user) {
+    return res.status(401).send({ error: 'Wrong token' });
+  }
+
   return next();
 };
 

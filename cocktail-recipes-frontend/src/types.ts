@@ -25,14 +25,14 @@ export interface CocktailMutation {
 }
 
 export interface RegisterMutation {
-  username: string;
+  email: string;
   password: string;
   displayName: string
   avatar: File | null;
 }
 
 export interface LoginMutation {
-  username: string;
+  email: string;
   password: string;
 }
 

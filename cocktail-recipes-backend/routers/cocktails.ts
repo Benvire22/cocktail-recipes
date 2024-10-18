@@ -4,10 +4,11 @@ import auth, { RequestWithUser } from '../middleware/auth';
 import permit from '../middleware/permit';
 import Cocktail from '../models/Cocktail';
 import { imageUpload } from '../multer';
+import authSimple from '../middleware/authSimple';
 
 const cocktailsRouter = express.Router();
 
-cocktailsRouter.get('/', auth, async (req: RequestWithUser, res, next) => {
+cocktailsRouter.get('/', authSimple, async (req: RequestWithUser, res, next) => {
   try {
     const currentUser = req.user;
     const { user } = req.query;
@@ -32,7 +33,7 @@ cocktailsRouter.get('/', auth, async (req: RequestWithUser, res, next) => {
   }
 });
 
-cocktailsRouter.get('/:id', auth, async (req: RequestWithUser, res, next) => {
+cocktailsRouter.get('/:id', authSimple, async (req: RequestWithUser, res, next) => {
   try {
     if (!mongoose.isValidObjectId(req.params.id)) {
       return res.status(400).send({ error: 'Invalid cocktail ID' });

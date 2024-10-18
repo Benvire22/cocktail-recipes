@@ -23,9 +23,7 @@ const App = () => {
           <Route
             path="/cocktails/:id"
             element={
-              <ProtectedRoute isAllowed={user && (user.role === 'user' || user.role === 'admin')}>
-                <OneCocktail />
-              </ProtectedRoute>
+              <OneCocktail />
             }
           />
           <Route

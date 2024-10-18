@@ -18,7 +18,7 @@ const Register = () => {
   const error = useAppSelector(selectRegisterError);
 
   const [state, setState] = useState<RegisterMutation>({
-    username: '',
+    email: '',
     password: '',
     displayName: '',
     avatar: null,
@@ -53,7 +53,7 @@ const Register = () => {
       navigate('/');
 
       setState({
-        username: '',
+        email: '',
         password: '',
         displayName: '',
         avatar: null,
@@ -83,9 +83,9 @@ const Register = () => {
         <Grid container direction="column" spacing={2}>
           <Grid>
             <TextField
-              label="Username"
-              name="username"
-              value={state.username}
+              label="email"
+              name="email"
+              value={state.email}
               autoComplete="new-username"
               onChange={inputChangeHandler}
               required

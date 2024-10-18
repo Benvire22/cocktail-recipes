@@ -87,7 +87,7 @@ const CocktailItem: React.FC<Props> = ({ id, title, image, isPublished, user }) 
               <span>delete cocktail</span>
             </LoadingButton>
           )}
-          <IconButton component={Link} to={`/artists/${id}`}>
+          <IconButton component={Link} to={`/cocktails/${id}`}>
             <ArrowForwardIcon />
           </IconButton>
         </CardActions>
