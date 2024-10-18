@@ -26,7 +26,7 @@ export const initialState: CocktailsState = {
   isDeleting: false,
 };
 
-export const artistsSlice = createSlice({
+export const cocktailsSlice = createSlice({
   name: 'cocktails',
   initialState,
   reducers: {},
@@ -108,7 +108,7 @@ export const artistsSlice = createSlice({
   },
 });
 
-export const artistsReducer = artistsSlice.reducer;
+export const cocktailsReducer = cocktailsSlice.reducer;
 
 export const {
   selectCocktails,
@@ -119,4 +119,4 @@ export const {
   selectErrorCreatingCocktail,
   selectPublishingCocktail,
   selectDeletingCocktail,
-} = artistsSlice.selectors;
+} = cocktailsSlice.selectors;

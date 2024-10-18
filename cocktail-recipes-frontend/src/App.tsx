@@ -8,6 +8,7 @@ import { useAppSelector } from './app/hooks';
 import { selectUser } from './features/users/usersSlice';
 import Cocktails from './features/cocktails/Cocktails';
 import NewCocktail from './features/cocktails/NewCocktail';
+import OneCocktail from './features/cocktails/OneCocktail';
 
 const App = () => {
   const user = useAppSelector(selectUser);
@@ -20,18 +21,26 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Cocktails />} />
           <Route
-            path="/cocktails/new"
+            path="/cocktails/:id"
             element={
               <ProtectedRoute isAllowed={user && (user.role === 'user' || user.role === 'admin')}>
-                <NewCocktail />
+                <OneCocktail />
               </ProtectedRoute>
             }
           />
           <Route
-            path="/cocktails/user-cocktails"
+            path="/user-cocktails"
             element={
               <ProtectedRoute isAllowed={user && (user.role === 'user' || user.role === 'admin')}>
                 <Cocktails />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/cocktails/new"
+            element={
+              <ProtectedRoute isAllowed={user && (user.role === 'user' || user.role === 'admin')}>
+                <NewCocktail />
               </ProtectedRoute>
             }
           />
