@@ -19,7 +19,7 @@ export interface Cocktail {
 
 export interface CocktailMutation {
   title: string;
-  image: File;
+  image: File | null;
   recipe: string;
   ingredients: CocktailIngredient[];
 }

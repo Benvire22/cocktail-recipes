@@ -38,12 +38,12 @@ const OneCocktail: React.FC = () => {
   if (!isFetching && cocktail) {
     content = (
       <Grid container flexDirection="column" spacing={2}>
-        <Grid container size={12} >
+        <Grid container size={12}>
           <Grid size={4}>
             <ImageCardMedia image={cardImage} title={cocktail.title} />
           </Grid>
           <Grid size={8}>
-            <Typography variant="h4" >Ingredients:</Typography>
+            <Typography variant="h4">Ingredients:</Typography>
             <List>
               {cocktail.ingredients.map((value, index) => (
                 <ListItem key={index} disableGutters>
@@ -57,6 +57,12 @@ const OneCocktail: React.FC = () => {
           <Typography variant="h5" mb={2}>Recipe:</Typography>
           <Typography variant="h6">{cocktail.recipe}</Typography>
         </Grid>
+      </Grid>
+    );
+  } else if (!isFetching) {
+    content = (
+      <Grid>
+        <Typography variant="h4">Cocktail not found</Typography>
       </Grid>
     );
   }

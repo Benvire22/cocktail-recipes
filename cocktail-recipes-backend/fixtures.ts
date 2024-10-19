@@ -14,12 +14,12 @@ const run = async () => {
     console.log('Error dropping database:', e);
   }
 
-  const [_user, admin] = await User.create({
+  const [user, admin] = await User.create({
     email: 'user@mail.com',
     password: '123WWW',
     displayName: 'Grisha',
     token: crypto.randomUUID(),
-    avatar: 'fixtures/admin-avatar.jpg',
+    avatar: 'fixtures/grisha.webp',
     role: 'user',
   }, {
     email: 'admin@mail.com',
@@ -31,18 +31,39 @@ const run = async () => {
   });
 
   await Cocktail.create({
-    user: admin,
-    title: 'ivanArtist',
-    recipe: '2024',
-    image: 'fixtures/admin-avatar.jpg',
+    user: user,
+    title: 'Tea',
+    recipe: 'Подогреть воду\n' +
+      'Для черного чая вода должна быть почти кипящей (95-100°C). Для зеленого и белого чая — немного прохладнее (75-85°C), чтобы не испортить вкус.',
+    image: 'fixtures/tea.webp',
     ingredients: [
       {
-        title: 'lol',
-        quantity: '15ml',
+        title: 'Tea',
+        quantity: '15g',
       },
       {
-        title: 'lol',
-        quantity: '125ml',
+        title: 'water',
+        quantity: '400ml',
+      },
+    ],
+    isPublished: true,
+  }, {
+    user: admin,
+    title: 'Coffee',
+    recipe: 'Сначала вскипятите воду. Лучше использовать свежую фильтрованную воду, ' +
+      'чтобы улучшить вкус кофе. Добавьте 1-2 чайные ложки растворимого кофе в чашку. ' +
+      'Количество кофе зависит от того, насколько крепкий напиток вы хотите получить. ' +
+      'Залейте кофе горячей водой (около 90-95°C, но не кипящей). ' +
+      'Оставьте немного места в чашке, если вы планируете добавить молоко или сливки.',
+    image: 'fixtures/coffee.webp',
+    ingredients: [
+      {
+        title: 'Coffee',
+        quantity: '10g',
+      },
+      {
+        title: 'water',
+        quantity: '200ml',
       },
     ],
     isPublished: true,

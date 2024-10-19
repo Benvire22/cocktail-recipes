@@ -41,13 +41,23 @@ cocktailsRouter.get('/:id', authSimple, async (req: RequestWithUser, res, next) 
 
     const user = req.user;
 
-    const cocktail = await Cocktail.findOne({ _id: req.params.id }).populate('user', '_id displayName');
+    if (user) {
+      const cocktail = await Cocktail.findOne({
+        _id: req.params.id,
+        user,
+      }).populate('user', '_id displayName');
 
-    if (user?._id === cocktail?.user || user?.role === 'admin') {
-      return res.send(cocktail);
+      if (cocktail || user.role === 'admin') {
+        return res.send(cocktail);
+      }
     }
 
-    if (!cocktail || !cocktail.isPublished) {
+    const cocktail = await Cocktail.findOne({
+      _id: req.params.id,
+      isPublished: true,
+    }).populate('user', '_id displayName');
+
+    if (!cocktail) {
       return res.status(400).send({ error: 'Cocktail not found!' });
     }
 

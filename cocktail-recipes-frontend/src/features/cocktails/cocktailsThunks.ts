@@ -30,9 +30,12 @@ export const createCocktail = createAsyncThunk<void, CocktailMutation, {
     const formData = new FormData();
 
     formData.append('title', cocktailMutation.title);
-    formData.append('image', cocktailMutation.image);
     formData.append('recipe', cocktailMutation.recipe);
     formData.append('ingredients', JSON.stringify(cocktailMutation.ingredients));
+
+    if (cocktailMutation.image) {
+      formData.append('image', cocktailMutation.image);
+    }
 
     await axiosApi.post(`/cocktails/`, formData);
   } catch (e) {

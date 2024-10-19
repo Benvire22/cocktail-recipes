@@ -1,25 +1,28 @@
 import React, { useState } from 'react';
-import { Alert, TextField } from '@mui/material';
+import { Alert, Button, TextField, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { LoadingButton } from '@mui/lab';
 import SaveIcon from '@mui/icons-material/Save';
-import { ArtistMutation } from '../../../types';
 import FileInput from '../../../UI/FileInput/FileInput';
 import { useAppSelector } from '../../../app/hooks';
-import { selectErrorCreatingArtist } from '../artistsSlice';
+import { CocktailMutation } from '../../../types';
+import { selectErrorCreatingCocktail } from '../cocktailsSlice';
 
 interface Props {
-  onSubmit: (artist: ArtistMutation) => void;
+  onSubmit: (cocktail: CocktailMutation) => void;
   isLoading: boolean;
 }
 
 const CocktailForm: React.FC<Props> = ({ onSubmit, isLoading }) => {
-  const error = useAppSelector(selectErrorCreatingArtist);
+  const error = useAppSelector(selectErrorCreatingCocktail);
 
-  const [state, setState] = useState<ArtistMutation>({
-    name: '',
-    description: '',
-    photo: null,
+  const [state, setState] = useState<CocktailMutation>({
+    title: '',
+    recipe: '',
+    image: null,
+    ingredients: [
+      { title: '', quantity: '' },
+    ],
   });
 
   const submitFormHandler = (event: React.FormEvent) => {
@@ -35,6 +38,23 @@ const CocktailForm: React.FC<Props> = ({ onSubmit, isLoading }) => {
     }));
   };
 
+  const onIngredientChange = (index: number, e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setState(prevState => ({
+      ...prevState,
+      ingredients: prevState.ingredients.map((ingredient, i) => {
+        if (i !== index) return ingredient;
+        return {
+          ...ingredient,
+          [e.target.name]: e.target.value,
+        };
+      }),
+    }));
+  };
+
+  const addIngredient = () => {
+    setState({ ...state, ingredients: [...state.ingredients, { title: '', quantity: '' }] });
+  };
+
   const fileInputChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, files } = event.target;
     const value = files && files[0] ? files[0] : null;
@@ -43,6 +63,14 @@ const CocktailForm: React.FC<Props> = ({ onSubmit, isLoading }) => {
       ...prevState,
       [name]: value,
     }));
+  };
+
+  const removeIngredient = (index: number) => {
+    setState((prevState) => ({
+        ...prevState,
+        ingredients: prevState.ingredients.filter((_, i) => i !== index),
+      }
+    ));
   };
 
   return (
@@ -54,28 +82,55 @@ const CocktailForm: React.FC<Props> = ({ onSubmit, isLoading }) => {
       )}
       <Grid>
         <TextField
-          label="Artist name"
-          id="name"
-          name="name"
-          value={state.name}
+          label="Cocktail title"
+          id="title"
+          name="title"
+          value={state.title}
           onChange={inputChangeHandler}
+          required
         />
+      </Grid>
+      <Grid>
+        <Typography variant="h5" mb={2}>Ingredients</Typography>
+        {state.ingredients.map((ingredient, i) => (
+          <Grid key={i} display="flex" gap={2} marginBottom={2}>
+            <TextField
+              label="ingredient"
+              name="title"
+              value={ingredient.title}
+              onChange={e => onIngredientChange(i, e)}
+              required
+            />
+            <TextField
+              label="Quantity"
+              name="quantity"
+              value={ingredient.quantity}
+              onChange={e => onIngredientChange(i, e)}
+              required
+            />
+            {i > 0 ? (
+              <Button color="error" variant="contained" onClick={() => removeIngredient(i)}>-</Button>
+            ) : null}
+          </Grid>
+        ))}
+        <Button onClick={addIngredient}>Add ingredient +</Button>
       </Grid>
       <Grid>
         <TextField
           multiline
           minRows={4}
-          label="Description"
-          id="description"
-          name="description"
-          value={state.description}
+          label="recipe"
+          id="recipe"
+          name="recipe"
+          value={state.recipe}
           onChange={inputChangeHandler}
+          required
         />
       </Grid>
       <Grid>
         <FileInput
-          label="Photo"
-          name="photo"
+          label="image"
+          name="image"
           onChange={fileInputChangeHandler}
         />
       </Grid>

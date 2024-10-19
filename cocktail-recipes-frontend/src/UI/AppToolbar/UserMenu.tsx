@@ -5,6 +5,7 @@ import { User } from '../../types';
 import { NavLink } from 'react-router-dom';
 import { useAppDispatch } from '../../app/hooks';
 import { logout } from '../../features/users/usersThunks';
+import { API_URL } from '../../constants';
 
 interface Props {
   user: User;
@@ -30,7 +31,7 @@ const UserMenu: React.FC<Props> = ({ user }) => {
       </Button>
       <Button color="inherit" sx={{ ml: 10, textTransform: 'none' }} onClick={handleClick}>
         {user.displayName}
-        <Avatar sx={{ ml: 2 }} src={user.avatar} alt={user.displayName} />
+        <Avatar sx={{ ml: 2 }} src={`${API_URL}/${user.avatar}`} alt={user.displayName} />
       </Button>
       <Menu open={isOpen} onClose={handleClose} anchorEl={anchorEl} keepMounted>
         <MenuItem onClick={handleClose} component={NavLink} to={`/user-cocktails/${user._id}`}>
